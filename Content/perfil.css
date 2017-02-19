@@ -1,0 +1,15 @@
+﻿/* Move down content because we have a fixed navbar that is 50px tall */
+.marge-superior {
+  padding-top: 50px !important;
+}
+.brand
+{
+    color:royalblue;
+    margin:8px;
+    font-family: "Bitter";
+    font-weight:700;
+}
+a:hover
+{
+    text-decoration:none !important;
+}
