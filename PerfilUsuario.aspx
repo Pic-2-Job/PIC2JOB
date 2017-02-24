@@ -4,20 +4,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="description" content="pagina de un usuario que permite modificar perfil etc...">
     <meta name="author" content="Pic2Job_arnau">
 
     <title>PPERFIL</title>
 
+    <!-- Bootstrap core CSS -->
+    <link href="Content/bootstrap-theme.min.css" type="text/css" rel="stylesheet" />
+    <link href="Content/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="Scripts/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="Scripts/bootstrap.min.js"></script>
+
     <!-- Css -->
     <link href="Content/perfil.css" rel="stylesheet">
-
-    <!-- Bootstrap core CSS -->
-    <link href="Content/bootstrap.min.css" rel="stylesheet" />
 
     <link href="https://fonts.googleapis.com/css?family=Bitter" rel="stylesheet">
 </head>
@@ -270,9 +270,11 @@
                                 </tr>
                             </table>
                             <div class="col-xs-12">
-                                <asp:FileUpload ID="subirImagen" runat="server"></asp:FileUpload>
-                                <asp:LinkButton ID="LinkButtonSubir" runat="server" CssClass="btn btn-success" OnClick="botonSubir_Click"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Subir</asp:LinkButton>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#subirimagen">
+                                    Subir imagen
+                                </button>
                             </div>
+
                         </div>
 
                     </div>
@@ -286,9 +288,27 @@
 
         </div>
 
-    </form>
+        <div class="modal fade" id="subirimagen" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Subir imagen</h4>
+                    </div>
+                    <div class="modal-body">
+                        <asp:FileUpload CssClass="col-xs-12" ID="subirImagen" runat="server"></asp:FileUpload>
+                        <asp:TextBox CssClass="col-xs-9" ID="TextBoxDescripcion" runat="server" placeholder="Introduce una descripcion" TextMode="SingleLine" CausesValidation="True" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidatorDescripcion" runat="server" ErrorMessage="Introduce una descripcion por favor!" ControlToValidate="TextBoxDescripcion" Display="Dynamic" CssClass="col-xs-12 alert alert-danger text-center"></asp:RequiredFieldValidator>
+                        <asp:LinkButton ID="LinkButtonSubir" runat="server" CssClass="btn btn-success" OnClick="botonSubir_Click"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Subir</asp:LinkButton>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-primary">Finalizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <script type="text/javascript" src="Scripts/jquery-3.1.1.min.js"></script>
+    </form>
 
 </body>
 </html>

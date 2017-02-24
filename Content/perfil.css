@@ -13,3 +13,12 @@ a:hover
 {
     text-decoration:none !important;
 }
+body.modal-open 
+{ 
+	overflow: inherit; 
+	padding-right: inherit !important; 
+}
+button:active
+{
+    outline: none !important;
+}

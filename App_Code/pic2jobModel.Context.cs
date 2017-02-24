@@ -26,4 +26,5 @@ public partial class pic2jobEntities : DbContext
     public virtual DbSet<ciudades> ciudades { get; set; }
     public virtual DbSet<imagenes> imagenes { get; set; }
     public virtual DbSet<usuarios> usuarios { get; set; }
+    public virtual DbSet<empresas> empresas { get; set; }
 }

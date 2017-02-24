@@ -16,22 +16,26 @@ public partial class login : System.Web.UI.Page
 
     protected void validacion_Click(object sender, EventArgs e)
     {
-        int id;
+        string email = textBox_email.Text,
+                pass = textBox_pass.Text;
 
-        string  email = textBox_email.Text,
-                pass = textBox_pass.Text,
-                comprobacion = Pic2JobEntity.comprobarUsuariPass(email, pass);
-
-        bool correcto = int.TryParse(comprobacion, out id);
-
-        if (correcto)
+        int id = Pic2JobEntity.comprobarUsuariPass(email, pass);
+        
+        if (id != 0)
         {
-            Session["id"] = id;
-            Response.Redirect("PerfilUsuario.aspx");
+            if ((string)Session["usuario"] == "usuari")
+            {
+                Session["usuario"] = id;
+                Response.Redirect("PerfilUsuario.aspx");
+            }
+            else if ((string)Session["usuario"] == "empresa")
+            {
+                Session["usuario"] = id;
+                Response.Redirect("PerfilEmpresa.aspx");
+            }
         }
         else
         {
-            LabelError.Text = comprobacion;
             errorUsuario.Visible = true;
         }
 

@@ -5,11 +5,13 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="185eb12ab7db4f7e9564942e83eba114" Name="Diagram1">
-        <EntityTypeShape EntityType="pic2jobModel.ciudades" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="pic2jobModel.imagenes" Width="1.5" PointX="5.25" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="pic2jobModel.usuarios" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="pic2jobModel.ciudades" Width="1.5" PointX="4.125" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="pic2jobModel.imagenes" Width="1.75" PointX="10" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="pic2jobModel.usuarios" Width="1.5" PointX="7.125" PointY="1.75" IsExpanded="true" />
         <AssociationConnector Association="pic2jobModel.FK_usuarios_ciudades" ManuallyRouted="false" />
         <AssociationConnector Association="pic2jobModel.FK_imagenes_usuarios" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="pic2jobModel.empresas" Width="1.5" PointX="1.375" PointY="2.5" />
+        <AssociationConnector Association="pic2jobModel.FK_empresas_ciudades" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

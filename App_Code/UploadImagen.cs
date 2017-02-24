@@ -128,5 +128,12 @@ namespace Pic2Job.UploadImagen
                 return "ERROR: Selecciona una imagen porfavor";
             }
         }
+        public static void DeleteImatge(string src)
+        {
+            if (!File.Exists(System.Web.HttpContext.Current.Server.MapPath(src)))
+            {
+                File.Delete(System.Web.HttpContext.Current.Server.MapPath(src));
+            }
+        }
     }
 }

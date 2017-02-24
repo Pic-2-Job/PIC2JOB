@@ -16,6 +16,7 @@ public partial class ciudades
     public ciudades()
     {
         this.usuarios = new HashSet<usuarios>();
+        this.empresas = new HashSet<empresas>();
     }
 
     public int id_ciudad { get; set; }
@@ -23,6 +24,25 @@ public partial class ciudades
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     public virtual ICollection<usuarios> usuarios { get; set; }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<empresas> empresas { get; set; }
+}
+
+public partial class empresas
+{
+    public int id_empresa { get; set; }
+    public string cif { get; set; }
+    public string nombre { get; set; }
+    public string direccion { get; set; }
+    public int id_ciudad { get; set; }
+    public string correo { get; set; }
+    public string telefono { get; set; }
+    public string personacontacto { get; set; }
+    public string descripcion { get; set; }
+    public Nullable<int> tipo_trabajo { get; set; }
+    public string pass { get; set; }
+
+    public virtual ciudades ciudades { get; set; }
 }
 
 public partial class imagenes
@@ -30,6 +50,7 @@ public partial class imagenes
     public int id { get; set; }
     public string src { get; set; }
     public int id_usuario { get; set; }
+    public string descripcion { get; set; }
 
     public virtual usuarios usuarios { get; set; }
 }

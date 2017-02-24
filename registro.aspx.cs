@@ -14,62 +14,147 @@ public partial class registro : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         //Se quitan los mensajes si hubiera
-        errorNick.Visible = false;
-        errorEmail.Visible = false;
-        errorTelf.Visible = false;
-        LabelMensaje.Visible = false;
+        ErrorCamposEmpresa.Visible = false;
+        ErrorCamposUsuario.Visible = false;
+
+        ErrorEmailEmpresa.Visible = false;
+        ErrorEmailEmpresa.Visible = false;
+
+        ErrorTelefonoEmpresa.Visible = false;
+        ErrorTelefonoUsuario.Visible = false;
+
+        ErrorNick.Visible = false;
+
+        LabelMensajeEmpresa.Visible = false;
+        LabelMensajeUsuario.Visible = false;
+
+    }
+    protected void ButtonUsuario_Click(object sender, EventArgs e)
+    {
+        PanelUsuarios.Visible = true;
+        PanelBotones.Visible = false;
+    }
+    protected void ButtonEmpresa_Click(object sender, EventArgs e)
+    {
+        PanelEmpresas.Visible = true;
+        PanelBotones.Visible = false;
     }
 
-    protected void validacion_Click(object sender, EventArgs e)
+    protected void ValidacionUsuario_Click(object sender, EventArgs e)
     {
         //Se quitan los mensajes si hubiera
-        errorNick.Visible = false;
-        errorEmail.Visible = false;
-        errorTelf.Visible = false;
-        LabelMensaje.Visible = false;
+        ErrorCamposUsuario.Visible = false;
+        ErrorEmailUsuario.Visible = false;
+        ErrorNick.Visible = false;
+        ErrorTelefonoUsuario.Visible = false;
+        LabelMensajeUsuario.Visible = false;
 
-        String  nick = textBoxNick.Text,
-                nombre = textBox_nombre.Text,
-                apellidos = textBox_apellidos.Text,
-                email = textBox_email.Text,
-                telefono = textBoxTelf.Text,
-                pass = textBox_pass.Text;
+        String  nick = TextBoxNick.Text,
+                nombre = TextBoxNombreUsuario.Text,
+                apellidos = TextBoxApellidos.Text,
+                email = TextBoxEmailUsuario.Text,
+                telefono = TextBoxTelefonoUsuario.Text,
+                pass = TextBoxPassUsuario.Text;
 
 
         if (nick == "" || nombre == "" || apellidos == "" || email == "" || telefono == "")
         {
-            errorCampos.Visible = true;
+            ErrorCamposUsuario.Visible = true;
         }
         else
         {
             if (Pic2JobEntity.comprobarNick(nick))
             {
-                errorNick.Visible = true;
+                ErrorNick.Visible = true;
             }
             else
             {
-                if (Pic2JobEntity.comprobarEmail(email))
+                if (Pic2JobEntity.comprobarEmailUsuario(email) || Pic2JobEntity.comprobarEmailEmpresa(email))
                 {
-                    errorEmail.Visible = true;
+                    ErrorEmailUsuario.Visible = true;
                 }
                 else
                 {
-                    if (Pic2JobEntity.comprobarTelefono(telefono))
+                    if (Pic2JobEntity.comprobarTelefonoUsuario(telefono) || Pic2JobEntity.comprobarTelefonoEmpresa(telefono))
                     {
-                        errorTelf.Visible = true;
+                        ErrorTelefonoUsuario.Visible = true;
                     }
                     else
                     {
-                        LabelMensaje.Text = Pic2JobEntity.InsertarUsuario(nick, nombre, apellidos, email, telefono, pass);
-                        
-                        if (LabelMensaje.Text == "Usuario Registrado!")
+                        LabelMensajeUsuario.Text = Pic2JobEntity.InsertarUsuario(nick, nombre, apellidos, email, telefono, pass);
+
+                        if (LabelMensajeUsuario.Text == "Usuario Registrado!")
                         {
                             Session["correo"] = email;
                             Response.Redirect("login.aspx");
                         }
                         else
                         {
-                            LabelMensaje.Visible = true;
+                            LabelMensajeUsuario.Visible = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    protected void ValidacionEmpresa_Click(object sender, EventArgs e)
+    {
+        //Se quitan los mensajes si hubiera
+        ErrorCamposEmpresa.Visible = false;
+        ErrorEmailEmpresa.Visible = false;
+        ErrorTelefonoEmpresa.Visible = false;
+        LabelMensajeEmpresa.Visible = false;
+
+        String  cif = TextBoxCif.Text,
+                nombre = TextBoxNombreEmpresa.Text,
+                direccion = TextBoxDireccion.Text,
+                email = TextBoxEmailEmpresa.Text,
+                telefono = TextBoxTelefonoEmpresa.Text,
+                contacto = TextBoxContacto.Text,
+                pass = TextBoxPassEmpresa.Text;
+
+
+        if (cif == "" || nombre == "" || direccion == "" || email == "" || telefono == "" || contacto == "") 
+        {
+            ErrorCamposEmpresa.Visible = true;
+        }
+        else
+        {
+            if (Pic2JobEntity.comprobarCifEmpresa(cif))
+            {
+                ErrorCif.Visible = true;
+            }
+            else
+            {
+                if (Pic2JobEntity.comprobarNomEmpresa(nombre))
+                {
+                    ErrorNombre.Visible = true;
+                }
+                else
+                {
+                    if (Pic2JobEntity.comprobarEmailUsuario(email) || Pic2JobEntity.comprobarEmailEmpresa(email))
+                    {
+                        ErrorEmailEmpresa.Visible = true;
+                    }
+                    else
+                    {
+                        if (Pic2JobEntity.comprobarTelefonoUsuario(telefono) || Pic2JobEntity.comprobarTelefonoEmpresa(telefono))
+                        {
+                            ErrorTelefonoEmpresa.Visible = true;
+                        }
+                        else
+                        {
+                            LabelMensajeEmpresa.Text = Pic2JobEntity.InsertarEmpresa(cif, nombre, direccion, email, telefono, contacto, pass);
+
+                            if (LabelMensajeEmpresa.Text == "Usuario Registrado!")
+                            {
+                                Session["correo"] = email;
+                                Response.Redirect("login.aspx");
+                            }
+                            else
+                            {
+                                LabelMensajeEmpresa.Visible = true;
+                            }
                         }
                     }
                 }

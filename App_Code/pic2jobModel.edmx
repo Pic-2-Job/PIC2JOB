@@ -4,13 +4,29 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="pic2jobModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="pic2jobModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ciudades">
           <Key>
             <PropertyRef Name="id_ciudad" />
           </Key>
           <Property Name="id_ciudad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="empresas">
+          <Key>
+            <PropertyRef Name="id_empresa" />
+          </Key>
+          <Property Name="id_empresa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cif" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="direccion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_ciudad" Type="int" Nullable="false" />
+          <Property Name="correo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="telefono" Type="varchar" MaxLength="9" Nullable="false" />
+          <Property Name="personacontacto" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="100" />
+          <Property Name="tipo_trabajo" Type="int" />
+          <Property Name="pass" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="imagenes">
           <Key>
@@ -19,6 +35,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="src" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="id_usuario" Type="int" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="usuarios">
           <Key>
@@ -39,6 +56,18 @@
           <Property Name="tipo_trabajo" Type="int" />
           <Property Name="id_ciudad" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_empresas_ciudades">
+          <End Role="ciudades" Type="Self.ciudades" Multiplicity="1" />
+          <End Role="empresas" Type="Self.empresas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciudades">
+              <PropertyRef Name="id_ciudad" />
+            </Principal>
+            <Dependent Role="empresas">
+              <PropertyRef Name="id_ciudad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_imagenes_usuarios">
           <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
           <End Role="imagenes" Type="Self.imagenes" Multiplicity="*" />
@@ -65,8 +94,13 @@
         </Association>
         <EntityContainer Name="pic2jobModelStoreContainer">
           <EntitySet Name="ciudades" EntityType="Self.ciudades" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="empresas" EntityType="Self.empresas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="imagenes" EntityType="Self.imagenes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_empresas_ciudades" Association="Self.FK_empresas_ciudades">
+            <End Role="ciudades" EntitySet="ciudades" />
+            <End Role="empresas" EntitySet="empresas" />
+          </AssociationSet>
           <AssociationSet Name="FK_imagenes_usuarios" Association="Self.FK_imagenes_usuarios">
             <End Role="usuarios" EntitySet="usuarios" />
             <End Role="imagenes" EntitySet="imagenes" />
@@ -76,8 +110,7 @@
             <End Role="usuarios" EntitySet="usuarios" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="pic2jobModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -88,6 +121,7 @@
           <Property Name="id_ciudad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="usuarios" Relationship="Self.FK_usuarios_ciudades" FromRole="ciudades" ToRole="usuarios" />
+          <NavigationProperty Name="empresas" Relationship="pic2jobModel.FK_empresas_ciudades" FromRole="ciudades" ToRole="empresas" />
         </EntityType>
         <EntityType Name="imagenes">
           <Key>
@@ -97,6 +131,7 @@
           <Property Name="src" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="id_usuario" Type="Int32" Nullable="false" />
           <NavigationProperty Name="usuarios" Relationship="Self.FK_imagenes_usuarios" FromRole="imagenes" ToRole="usuarios" />
+          <Property Name="descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="usuarios">
           <Key>
@@ -155,7 +190,41 @@
             <End Role="usuarios" EntitySet="usuarios" />
             <End Role="imagenes" EntitySet="imagenes" />
           </AssociationSet>
+          <EntitySet Name="empresas" EntityType="pic2jobModel.empresas" />
+          <AssociationSet Name="FK_empresas_ciudades" Association="pic2jobModel.FK_empresas_ciudades">
+            <End Role="ciudades" EntitySet="ciudades" />
+            <End Role="empresas" EntitySet="empresas" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="empresas">
+          <Key>
+            <PropertyRef Name="id_empresa" />
+          </Key>
+          <Property Name="id_empresa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cif" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="direccion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id_ciudad" Type="Int32" Nullable="false" />
+          <Property Name="correo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="telefono" Type="String" Nullable="false" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Name="personacontacto" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="tipo_trabajo" Type="Int32" />
+          <Property Name="pass" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ciudades" Relationship="pic2jobModel.FK_empresas_ciudades" FromRole="empresas" ToRole="ciudades" />
+        </EntityType>
+        <Association Name="FK_empresas_ciudades">
+          <End Type="pic2jobModel.ciudades" Role="ciudades" Multiplicity="1" />
+          <End Type="pic2jobModel.empresas" Role="empresas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciudades">
+              <PropertyRef Name="id_ciudad" />
+            </Principal>
+            <Dependent Role="empresas">
+              <PropertyRef Name="id_ciudad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -173,6 +242,7 @@
           <EntitySetMapping Name="imagenes">
             <EntityTypeMapping TypeName="pic2jobModel.imagenes">
               <MappingFragment StoreEntitySet="imagenes">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="src" ColumnName="src" />
                 <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
@@ -196,6 +266,23 @@
                 <ScalarProperty Name="telefono" ColumnName="telefono" />
                 <ScalarProperty Name="tipo_trabajo" ColumnName="tipo_trabajo" />
                 <ScalarProperty Name="id_ciudad" ColumnName="id_ciudad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="empresas">
+            <EntityTypeMapping TypeName="pic2jobModel.empresas">
+              <MappingFragment StoreEntitySet="empresas">
+                <ScalarProperty Name="pass" ColumnName="pass" />
+                <ScalarProperty Name="tipo_trabajo" ColumnName="tipo_trabajo" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="personacontacto" ColumnName="personacontacto" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="id_ciudad" ColumnName="id_ciudad" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="cif" ColumnName="cif" />
+                <ScalarProperty Name="id_empresa" ColumnName="id_empresa" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

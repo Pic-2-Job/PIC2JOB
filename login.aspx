@@ -17,7 +17,7 @@
 
         </div>
         <div class="col-xs-4 col-xs-offset-4 alert alert-danger" id="errorUsuario" runat="server" Visible="false">
-            <asp:Label ID="LabelError" runat="server" CssClass="alert alert-danger text-center textoError"></asp:Label>
+            <asp:Label ID="LabelError" runat="server" CssClass="alert alert-danger text-center textoError" Text="Usuario o contraseña incorrectos!"></asp:Label>
         </div>
 
     </div>

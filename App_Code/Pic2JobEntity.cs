@@ -28,9 +28,43 @@ namespace Pic2Job.Entity
 
             return retorno;
         }
+        //Funcion que comprueba si el nick esta repetido.
+        public static bool comprobarCifEmpresa(string cif)
+        {
+            bool retorno = false;
+
+            empresas empresa =
+                (from c in contexto.empresas
+                 where c.cif == cif
+                 select c).FirstOrDefault();
+
+            if (empresa != null)
+            {
+                retorno = true;
+            }
+
+            return retorno;
+        }
+        //Funcion que comprueba si el nick esta repetido.
+        public static bool comprobarNomEmpresa(string nombre)
+        {
+            bool retorno = false;
+
+            empresas empresa =
+                (from c in contexto.empresas
+                 where c.nombre == nombre
+                 select c).FirstOrDefault();
+
+            if (empresa != null)
+            {
+                retorno = true;
+            }
+
+            return retorno;
+        }
 
         //Funcion que comprueba si el correo esta repetido.
-        public static bool comprobarEmail(string email)
+        public static bool comprobarEmailUsuario(string email)
         {
             bool retorno = false;
 
@@ -48,8 +82,27 @@ namespace Pic2Job.Entity
             return retorno;
         }
 
+        //Funcion que comprueba si el correo esta repetido.
+        public static bool comprobarEmailEmpresa(string email)
+        {
+            bool retorno = false;
+
+            empresas empresa =
+                (from c in contexto.empresas
+                 where c.correo == email
+                 select c).FirstOrDefault();
+
+
+            if (empresa != null)
+            {
+                retorno = true;
+            }
+
+            return retorno;
+        }
+
         //Funcion que comprueba si el telefono esta repetido.
-        public static bool comprobarTelefono(string telefono)
+        public static bool comprobarTelefonoUsuario(string telefono)
         {
             bool retorno = false;
 
@@ -67,11 +120,28 @@ namespace Pic2Job.Entity
             return retorno;
         }
 
-        //Funcion comprueba hace el login.
-        public static string comprobarUsuariPass(string email, string pass)
+        //Funcion que comprueba si el telefono esta repetido.
+        public static bool comprobarTelefonoEmpresa(string telefono)
         {
-            string retorno;
+            bool retorno = false;
 
+            empresas empresa =
+                (from c in contexto.empresas
+                 where c.telefono == telefono
+                 select c).FirstOrDefault();
+
+
+            if (empresa != null)
+            {
+                retorno = true;
+            }
+
+            return retorno;
+        }
+
+        //Funcion comprueba hace el login.
+        public static int comprobarUsuariPass(string email, string pass)
+        {
             usuarios usuari = 
                 (from c in contexto.usuarios
                  where c.correo == email && c.pass == pass 
@@ -79,17 +149,34 @@ namespace Pic2Job.Entity
 
             if (usuari != null)
             {
-                retorno = usuari.id_usuario.ToString();
+
+                
+                System.Web.HttpContext.Current.Session["usuario"] = "usuari";
+
+                return usuari.id_usuario;
             }
             else
             {
-                retorno = "Usuario o contraseña incorrectos!";
+                empresas empresa =
+                    (from c in contexto.empresas
+                     where c.correo == email && c.pass == pass
+                     select c).FirstOrDefault();
+
+                if (empresa != null)
+                {
+
+                    System.Web.HttpContext.Current.Session["usuario"] = "empresa";
+
+
+                    return empresa.id_empresa;
+                }
             }
-            return retorno;
+            return 0;
         }
+        
 
         //Funcion que guarda un usuario.
-        public static String InsertarUsuario(String nick, String nombre, String apellidos, String email, String telefono, String pass)
+        public static string InsertarUsuario(string nick, string nombre, string apellidos, string email, string telefono, string pass)
         {
             usuarios usuari = new usuarios();
 
@@ -115,6 +202,33 @@ namespace Pic2Job.Entity
             }
         }
 
+        //Funcion que guarda un usuario.
+        public static string InsertarEmpresa(string cif, string nombre, string direccion, string email, string telefono, string contacte, string pass)
+        {
+            empresas empresa = new empresas();
+
+            empresa.cif = cif;
+            empresa.nombre = nombre;
+            empresa.direccion = direccion;
+            empresa.id_ciudad = 1;
+            empresa.correo = email;
+            empresa.telefono = telefono;
+            empresa.personacontacto = contacte;
+            empresa.pass = pass;
+
+            contexto.empresas.Add(empresa);
+
+            try
+            {
+                contexto.SaveChanges();
+
+                return "Empresa Registrada!";
+            }
+            catch (DbEntityValidationException ex)
+            {
+                return ex.EntityValidationErrors.ToString();
+            }
+        }
         //Funcion que obtiene todas las imagenes por id de usuario, retorna una lista de imagenes.
         public static List<imagenes> FindImatgesById(int id)
         {
@@ -135,6 +249,17 @@ namespace Pic2Job.Entity
                  select c).FirstOrDefault();
 
             return usuari;
+        }
+
+        //funcion que devuelve la empresa con el id indicado
+        public static empresas FindEmpresaById(int id)
+        {
+            empresas empresa =
+                (from c in contexto.empresas
+                 where c.id_empresa == id
+                 select c).FirstOrDefault();
+
+            return empresa;
         }
 
         //Funcion que modifica un usuario
@@ -187,6 +312,40 @@ namespace Pic2Job.Entity
             contexto.SaveChanges();
         }
 
+        //Funcion que modifica un usuario
+        public static void modificarEmpresa(int id, string campo_modificado, string valor)
+        {
+            empresas empresa = FindEmpresaById(id);
+
+            switch (campo_modificado)
+            {
+                case ("nombre"):
+                    empresa.nombre = valor;
+                    break;
+                case ("direccion"):
+                    empresa.direccion = valor;
+                    break;
+                case ("descripcion"):
+                    empresa.descripcion = valor;
+                    break;
+                case ("contacto"):
+                    empresa.personacontacto = valor;
+                    break;
+                case ("correo"):
+                    empresa.correo = valor;
+                    break;
+                case ("telefono"):
+                    empresa.telefono = valor;
+                    break;
+                case ("ciudad"):
+                    break;
+                case ("trabajo"):
+                    empresa.tipo_trabajo = int.Parse(valor);
+                    break;
+            }
+            contexto.SaveChanges();
+        }
+
         //funcion que busca una imagen por id de imagen
         public static imagenes FindImatgeById(int id)
         {
@@ -199,12 +358,13 @@ namespace Pic2Job.Entity
         }
 
         //funcion que añade un registro de una imagen subida ala base de datos
-        public static void InsertImagen(String source, int id)
+        public static void InsertImagen(String source, int id, string descripcion)
         {
             imagenes imagen = new imagenes();
 
             imagen.src = source;
             imagen.id_usuario = id;
+            imagen.descripcion = descripcion;
 
             contexto.imagenes.Add(imagen);
 
