@@ -7,6 +7,8 @@ using System.Web.UI.HtmlControls;
 
 public partial class PerfilEmpresa : System.Web.UI.Page
 {
+    protected int id;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         //si no se ha guardado el id en la sesion vuelves al login
@@ -14,9 +16,11 @@ public partial class PerfilEmpresa : System.Web.UI.Page
         {
             Response.Redirect("login.aspx");
         }
-
-        //parseamos el string id de la sesion y tenemos el id en int
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
+        else
+        {
+            id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
+            System.Web.HttpContext.Current.Session["usuario"] = null;
+        }
 
         //buscamos los datos del usuario pasandole el id
         empresas empresa = Pic2JobEntity.FindEmpresaById(id);
@@ -132,8 +136,6 @@ public partial class PerfilEmpresa : System.Web.UI.Page
    
     protected void LinkButtonGuardarNombre_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         if (!Pic2JobEntity.comprobarNomEmpresa(TextBoxNombre.Text))
         {
             Pic2JobEntity.modificarEmpresa(id, "nombre", TextBoxNombre.Text);
@@ -154,8 +156,6 @@ public partial class PerfilEmpresa : System.Web.UI.Page
 
     protected void LinkButtonGuardarDireccion_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         Pic2JobEntity.modificarEmpresa(id, "direccion", TextBoxDireccion.Text);
 
         LabelDireccion.Text = TextBoxDireccion.Text;
@@ -169,8 +169,6 @@ public partial class PerfilEmpresa : System.Web.UI.Page
 
     protected void LinkButtonGuardarDescripcion_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         Pic2JobEntity.modificarEmpresa(id, "descripcion", TextBoxDescripcion.Text);
 
         LabelDescripcion.Text = TextBoxDescripcion.Text;
@@ -183,8 +181,6 @@ public partial class PerfilEmpresa : System.Web.UI.Page
     }
     protected void LinkButtonGuardarContacto_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         Pic2JobEntity.modificarEmpresa(id, "contacto", TextBoxContacto.Text);
 
         LabelContacto.Text = TextBoxContacto.Text;
@@ -197,8 +193,6 @@ public partial class PerfilEmpresa : System.Web.UI.Page
     }
     protected void LinkButtonGuardarCorreo_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         if (!Pic2JobEntity.comprobarEmailEmpresa(TextBoxCorreo.Text))
         {
             Pic2JobEntity.modificarEmpresa(id, "correo", TextBoxCorreo.Text);
@@ -219,8 +213,6 @@ public partial class PerfilEmpresa : System.Web.UI.Page
 
     protected void LinkButtonGuardarTelefono_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         if (!Pic2JobEntity.comprobarTelefonoEmpresa(TextBoxTelefono.Text))
         {
 
@@ -247,8 +239,6 @@ public partial class PerfilEmpresa : System.Web.UI.Page
 
     protected void LinkButtonGuardarTrabajo_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         Pic2JobEntity.modificarEmpresa(id, "trabajo", DropDownListTrabajo.SelectedItem.Value);
 
         LabelTrabajo.Text = DropDownListTrabajo.SelectedItem.Text;

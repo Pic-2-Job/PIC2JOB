@@ -7,6 +7,8 @@ using System.Web.UI.HtmlControls;
 
 public partial class PerfilUsuario : System.Web.UI.Page
 {
+    protected int id;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         //si no se ha guardado el id en la sesion vuelves al login
@@ -14,9 +16,11 @@ public partial class PerfilUsuario : System.Web.UI.Page
         {
             Response.Redirect("login.aspx");
         }
-
-        //parseamos el string id de la sesion y tenemos el id en int
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
+        else
+        {
+            id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
+            System.Web.HttpContext.Current.Session["usuario"] = null;
+        }
 
         //buscamos las imagenes del usuario con el id
         List<imagenes> imatges = Pic2JobEntity.FindImatgesById(id);
@@ -282,8 +286,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
     //ala funcion comprobar para asegurarse de que no esta repetido.
     protected void LinkButtonGuardarNick_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         if (!Pic2JobEntity.comprobarNick(TextBoxNick.Text))
         {
             Pic2JobEntity.modificarUsuario(id, "nick", TextBoxNick.Text);
@@ -304,8 +306,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
 
     protected void LinkButtonGuardarNombre_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         Pic2JobEntity.modificarUsuario(id, "nombre", TextBoxNombre.Text);
 
         LabelNombre.Text = TextBoxNombre.Text;
@@ -319,8 +319,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
 
     protected void LinkButtonGuardarApellido_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         Pic2JobEntity.modificarUsuario(id, "apellido", TextBoxApellido.Text);
 
         LabelApellido.Text = TextBoxApellido.Text;
@@ -334,8 +332,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
 
     protected void LinkButtonGuardarCorreo_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         if (!Pic2JobEntity.comprobarEmailUsuario(TextBoxCorreo.Text))
         {
             Pic2JobEntity.modificarUsuario(id, "correo", TextBoxCorreo.Text);
@@ -356,8 +352,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
 
     protected void LinkButtonGuardarTelefono_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         if (!Pic2JobEntity.comprobarTelefonoUsuario(TextBoxTelefono.Text))
         {
 
@@ -379,8 +373,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
 
     protected void LinkButtonGuardarSexo_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         Pic2JobEntity.modificarUsuario(id, "sexo", RadioButtonListSexo.SelectedItem.Value);
 
         LabelSexo.Text = RadioButtonListSexo.SelectedItem.Text;
@@ -394,8 +386,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
 
     protected void LinkButtonGuardarAltura_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         double altura;
         bool error = double.TryParse(TextBoxAltura.Text, out altura);
 
@@ -419,8 +409,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
 
     protected void LinkButtonGuardarPeso_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         double peso;
         bool error = double.TryParse(TextBoxPeso.Text, out peso);
 
@@ -444,8 +432,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
 
     protected void LinkButtonGuardarGrupoEtnico_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         Pic2JobEntity.modificarUsuario(id, "grupoetnico", DropDownListGrupoEtnico.SelectedItem.Value);
 
         LabelGrupoEtnico.Text = DropDownListGrupoEtnico.SelectedItem.Text;
@@ -459,8 +445,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
 
     protected void LinkButtonGuardarFecha_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         Pic2JobEntity.modificarUsuario(id, "fecha", TextBoxFecha.Text);
 
         LabelFecha.Text = TextBoxFecha.Text;
@@ -479,8 +463,6 @@ public partial class PerfilUsuario : System.Web.UI.Page
 
     protected void LinkButtonGuardarTrabajo_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(System.Web.HttpContext.Current.Session["usuario"].ToString());
-
         Pic2JobEntity.modificarUsuario(id, "trabajo", DropDownListTrabajo.SelectedItem.Value);
 
         LabelTrabajo.Text = DropDownListTrabajo.SelectedItem.Text;
